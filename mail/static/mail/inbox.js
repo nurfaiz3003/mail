@@ -65,6 +65,7 @@ function send_email() {
 
 function show_email(email) {
   const emaildiv = document.createElement('div');
+  emaildiv.addEventListener('click', viewemail(email.id));
   
   if (email.read === true) {
     emaildiv.className += 'container my-1 py-2 rounded border border-secondary bg-secondary text-white';
@@ -85,4 +86,10 @@ function show_email(email) {
       </div>
     </div>`;
   document.querySelector('#emails-view').append(emaildiv);
+}
+
+function viewemail(id) {
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#viewemail').style.display = 'block';
 }
