@@ -16,6 +16,7 @@ function compose_email() {
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
+  document.querySelector('#view-email').style.display = 'none';
 
   // Clear out composition fields
   document.querySelector('#compose-recipients').value = '';
@@ -117,7 +118,8 @@ function show_email(email, mailbox) {
         <div><b>Subject</b> : ${emails.subject}</div>
         <div><b>Timestamp</b> : ${emails.timestamp}</div>
         <br>
-        <div><p>${emails.body}</p></div>`;
+        <div><pre>${emails.body}</pre><div>
+        <button onclick="replyemail('${emails.id}')" class="btn btn-primary">Reply</button>`;
     });
 
     fetch(`emails/${email.id}`, {
@@ -154,4 +156,36 @@ function unarchive(id) {
     })
   });
   setTimeout(function(){ load_mailbox('inbox'); }, 100);
+}
+
+function replyemail(emailid) {
+  fetch(`emails/${emailid}`)
+    .then(response => response.json())
+    .then(emails => {
+      console.log(emails);
+      compose_email();
+      setTimeout(function(){ 
+        document.querySelector('#compose-recipients').value = emails.sender;
+        
+        subject = emails.subject;
+
+        if (subject.includes("Re:")) {
+          sub = subject;
+        } else {
+          sub = "Re: " + subject;
+        }
+
+        document.querySelector('#compose-subject').value = sub;
+        document.querySelector('#compose-body').value = `\n------\nOn ${emails.timestamp} ${emails.sender} wrote: ${emails.body}`;
+      }, 100);
+
+      document.querySelector('#view-email').innerHTML = `
+        <div><b>From</b> : ${emails.sender}</div>
+        <div><b>To</b> : ${emails.recipients}</div>
+        <div><b>Subject</b> : ${emails.subject}</div>
+        <div><b>Timestamp</b> : ${emails.timestamp}</div>
+        <br>
+        <div><p>${emails.body}</p></div>
+        <button onclick="replyemail('${emails.id}')" class="btn btn-primary">Reply</button>`;
+    });
 }
