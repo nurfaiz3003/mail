@@ -76,15 +76,9 @@ function show_email(email, mailbox) {
   
   const button = document.createElement('div');
   if (mailbox === 'inbox') {
-    button.innerHTML = `
-    <div class="col-md-2">
-      <button value="${email.id}" onclick="archive(this.value)" type="button" class="btn btn-dark btn-sm">Archive</button>
-    </div>`;
+    button.innerHTML = `<button value="${email.id}" onclick="archive(this.value)" type="button" class="btn btn-dark btn-sm">Archive</button>`;
   } else if (mailbox === 'archive') {
-    button.innerHTML = `
-    <div class="col-md-2">
-      <button value="${email.id}" onclick="unarchive(this.value)" type="button" class="btn btn-dark btn-sm">Unarchive</button>
-    </div>`;
+    button.innerHTML = `<button value="${email.id}" onclick="unarchive(this.value)" type="button" class="btn btn-dark btn-sm">Unarchive</button>`;
   } else {
     button.innerHTML = `
     <div class="col-md-2"></div>`;
@@ -133,7 +127,7 @@ function show_email(email, mailbox) {
   const line = document.createElement('div');
   line.className = 'row';
   line.append(emaildiv);
-  line.append(button);
+  line.appendChild(button);
 
   document.querySelector('#emails-view').append(line);
 }
